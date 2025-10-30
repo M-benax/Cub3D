@@ -6,7 +6,7 @@
 /*   By: elben-id <elben-id@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 10:00:00 by M-benax           #+#    #+#             */
-/*   Updated: 2025/10/25 17:37:38 by elben-id         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:50:01 by elben-id         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	parse_component(char **pp, int *out)
 {
 	char	*p;
 	int		len;
-	int		val;
+	long	val;
 
 	p = *pp;
 	// while (*p == ' ' || *p == '\t')
@@ -31,10 +31,13 @@ static int	parse_component(char **pp, int *out)
 	len = 0;
 	while (is_digit(p[len]))
 		len++;
+	// Check for too many digits (RGB max is 255, so max 3 digits)
+	if (len > 3)
+		return (0);
 	val = ft_atoi_simple(p);
 	if (val < 0 || val > 255)
 		return (0);
-	*out = val;
+	*out = (int)val;
 	*pp = p + len;
 	return (1);
 }
