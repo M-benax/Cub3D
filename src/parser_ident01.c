@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_ident.c                                     :+:      :+:    :+:   */
+/*   parser_ident01.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elben-id <elben-id@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 09:55:57 by elben-id          #+#    #+#             */
-/*   Updated: 2025/10/26 09:35:03 by elben-id         ###   ########.fr       */
+/*   Updated: 2025/10/31 13:54:29 by elben-id         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static int	set_path(char **dest, char *src)
 	*dest = ft_strdup(src);
 	if (!*dest)
 		return (0);
-	printf("path: --%s---\n", *dest);
 	return (1);
 }
 
@@ -81,43 +80,5 @@ int	parse_identifier_line(char *line, t_map *map)
 		return (1);
 	if (parse_identifier_we(line, map))
 		return (1);
-	return (0);
-}
-static int parce_space_in_line(char *line)
-{
-	int i;
-
-	i = 0;
-	while (line[i] == ' ')
-		i++;
-	if (line[i] != ' ' && line[i] != '\0')
-		return (0);
-	return (1);
-}
-
-int	parse_identifier_line2(char *line, t_map *map)
-{
-	if 	(!line || parce_space_in_line(line))
-	{
-		return (1);
-	}
-	if (ft_strncmp(line, "F ", 2) == 0)
-	{
-		if (map->f_set)
-			return (0);
-		if (!parse_color_line(line + 2, map->floor_color))
-			return (0);
-		map->f_set = 1;
-		return (1);
-	}
-	if (ft_strncmp(line, "C ", 2) == 0)
-	{
-		if (map->c_set)
-			return (0);
-		if (!parse_color_line(line + 2, map->ceiling_color))
-			return (0);
-		map->c_set = 1;
-		return (1);
-	}
 	return (0);
 }

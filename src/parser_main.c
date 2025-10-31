@@ -6,7 +6,7 @@
 /*   By: elben-id <elben-id@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 10:00:00 by M-benax           #+#    #+#             */
-/*   Updated: 2025/10/25 16:38:33 by elben-id         ###   ########.fr       */
+/*   Updated: 2025/10/31 13:47:52 by elben-id         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static t_line	*consume_identifiers(t_line *head, t_map *map)
 	cur = head;
 	while (cur)
 	{
-		if	(parse_identifier_line(cur->text, map)
+		if (parse_identifier_line(cur->text, map)
 			|| parse_identifier_line2(cur->text, map))
 		{
 			cur = cur->next;
@@ -48,6 +48,5 @@ int	parse_cub_file(char *filename, t_map *map)
 	if (!map->no_set || !map->so_set || !map->we_set || !map->ea_set
 		|| !map->f_set || !map->c_set)
 		return (0);
-	
 	return (validate_map(map));
 }
