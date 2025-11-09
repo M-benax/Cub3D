@@ -6,7 +6,7 @@
 /*   By: elben-id <elben-id@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 16:31:42 by elben-id          #+#    #+#             */
-/*   Updated: 2025/10/26 19:16:52 by elben-id         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:34:12 by elben-id         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,35 @@ size_t	ft_strlen(char *s)
 char	*ft_strdup(char *s1)
 {
 	char	*dst;
+	size_t	start;
+	size_t	end;
 	size_t	len;
 	size_t	i;
 
 	if (!s1)
 		return (NULL);
-	len = ft_strlen(s1);
-	dst = (char *)malloc(len + 1);
+	start = 0;
+	while (s1[start] == ' ' || s1[start] == '\t')
+		start++;
+	if (s1[start] == '\0')
+	{
+		dst = malloc(1);
+		if (!dst)
+			return (NULL);
+		dst[0] = '\0';
+		return (dst);
+	}
+	end = ft_strlen(s1) - 1;
+	while (end > start && (s1[end] == ' ' || s1[end] == '\t'))
+		end--;
+	len = end - start + 1;
+	dst = malloc(len + 1);
 	if (!dst)
 		return (NULL);
 	i = 0;
 	while (i < len)
 	{
-		dst[i] = s1[i];
+		dst[i] = s1[start + i];
 		i++;
 	}
 	dst[i] = '\0';

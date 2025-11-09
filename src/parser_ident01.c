@@ -6,15 +6,35 @@
 /*   By: elben-id <elben-id@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 09:55:57 by elben-id          #+#    #+#             */
-/*   Updated: 2025/10/31 13:54:29 by elben-id         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:34:30 by elben-id         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-
+int	is_valid_path_line(char *line)
+{
+	if (!line)
+		return (0);
+	while (*line == ' ' || *line == '\t')
+		line++;
+	while (*line && *line != ' ' && *line != '\t')
+		line++;
+	while (*line == ' ' || *line == '\t')
+		line++;
+	if (*line != '\0')
+		return (0);
+	return (1);
+}
 static int	set_path(char **dest, char *src)
 {
+	if (!is_valid_path_line(src))
+	{
+		printf("Error: Invalid path -> '%s'\n", src);
+		return (0);
+	}
+
 	*dest = ft_strdup(src);
+	printf("--%s---\n",*dest);
 	if (!*dest)
 		return (0);
 	return (1);

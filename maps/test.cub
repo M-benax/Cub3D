@@ -1,5 +1,5 @@
-NO ./textures/north.xpm
-WE ./textures/west.xpm 
+NO      ./textures/north.xpm        a
+WE ./textures/west.xpm 		
 
 F 210,0,33
 EA ./textures/east.xpm              
