@@ -6,7 +6,7 @@
 /*   By: elben-id <elben-id@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 16:31:42 by elben-id          #+#    #+#             */
-/*   Updated: 2025/11/05 19:34:12 by elben-id         ###   ########.fr       */
+/*   Updated: 2025/11/11 15:19:46 by elben-id         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,39 @@ size_t	ft_strlen(char *s)
 	return (i);
 }
 
-char	*ft_strdup(char *s1)
+static char	*alloc_empty(void)
 {
 	char	*dst;
+
+	dst = malloc(1);
+	if (!dst)
+		return (NULL);
+	dst[0] = '\0';
+	return (dst);
+}
+
+static char	*copy_range(char *s, size_t start, size_t len)
+{
+	char	*dst;
+	size_t	i;
+
+	dst = malloc(len + 1);
+	if (!dst)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		dst[i] = s[start + i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (dst);
+}
+
+char	*ft_strdup(char *s1)
+{
 	size_t	start;
 	size_t	end;
-	size_t	len;
-	size_t	i;
 
 	if (!s1)
 		return (NULL);
@@ -38,79 +64,9 @@ char	*ft_strdup(char *s1)
 	while (s1[start] == ' ' || s1[start] == '\t')
 		start++;
 	if (s1[start] == '\0')
-	{
-		dst = malloc(1);
-		if (!dst)
-			return (NULL);
-		dst[0] = '\0';
-		return (dst);
-	}
+		return (alloc_empty());
 	end = ft_strlen(s1) - 1;
 	while (end > start && (s1[end] == ' ' || s1[end] == '\t'))
 		end--;
-	len = end - start + 1;
-	dst = malloc(len + 1);
-	if (!dst)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		dst[i] = s1[start + i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (dst);
-}
-
-int	ft_strncmp(char *s1, char *s2, size_t n)
-{
-	size_t	i;
-
-	if (!s1 || !s2)
-		return (1);
-	i = 0;
-	while (i < n && (s1[i] || s2[i]))
-	{
-		if ((unsigned char)s1[i] != (unsigned char)s2[i])
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		i++;
-	}
-	return (0);
-}
-
-int	ft_atoi_simple(char *s)
-{
-	int	neg;
-	int	val;
-
-	if (!s)
-		return (0);
-	neg = 1;
-	val = 0;
-	while (*s == ' ' || *s == '\t')
-		s++;
-	if (*s == '-')
-		neg = -1;
-	if (*s == '+' || *s == '-')
-		s++;
-	while (*s >= '0' && *s <= '9')
-	{
-		val = val * 10 + (*s - '0');
-		s++;
-	}
-	return (val * neg);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	size_t	i;
-	char	*p;
-
-	p = (char *)s;
-	i = 0;
-	while (i < n)
-	{
-		p[i] = 0;
-		i++;
-	}
+	return (copy_range(s1, start, end - start + 1));
 }

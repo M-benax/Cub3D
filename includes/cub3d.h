@@ -58,6 +58,13 @@ int		parse_identifier_line2(char *line, t_map *map);
 /* validate.c */
 int		validate_map(t_map *map);
 
+/* validate_helper.c */
+int		is_allowed(char c);
+int		scan_row_for_player(t_map *map, int y);
+int		locate_player(t_map *map);
+int		cell_is_enclosed(t_map *map, int x, int y);
+void	fill_spaces_with_walls(t_map *map);
+
 /* utils.c */
 t_line	*read_file_to_list(char *filename);
 int		build_grid_from_list(t_line *start, t_map *map);
