@@ -87,9 +87,15 @@ t_line	*read_file_to_list(char *filename)
 
 	if (!filename)
 		return (NULL);
+	printf("Attempting to open: '%s'\n", filename);
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
+	{
+		perror("Error opening file");
+		printf("Failed to open: '%s'\n", filename);
 		return (NULL);
+	}
+	printf("File opened successfully, fd=%d\n", fd);
 	head = NULL;
 	while (1)
 	{

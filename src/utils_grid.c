@@ -71,16 +71,16 @@ static int	fill_grid_rows(t_line *start, t_map *map)
 
 int	build_grid_from_list(t_line *start, t_map *map)
 {
-	int		count;
-	int		maxw;
+	int		h;
+	int		max_width;
 
 	if (!start || !map)
 		return (0);
-	compute_size(start, &count, &maxw);
-	if (count == 0)
+	compute_size(start, &h, &max_width);
+	if (h == 0)
 		return (0);
-	map->height = count;
-	map->width = maxw;
+	map->height = h;
+	map->width = max_width;
 	map->grid = (char **)malloc(sizeof(char *) * map->height);
 	if (!map->grid)
 		return (0);
