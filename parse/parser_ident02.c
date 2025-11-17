@@ -12,6 +12,44 @@
 
 #include "../includes/cub3d.h"
 
+int	is_empty_line(char *text)
+{
+	if (!text)
+		return (1);
+	while (*text)
+	{
+		if (*text != ' ' && *text != '\t')
+			return (0);
+		text++;
+	}
+	return (1);
+}
+
+t_line	*consume_identifiers(t_line *head, t_map *map)
+{
+	t_line	*cur;
+
+	cur = head;
+	while (cur)
+	{
+		if (parse_identifier_line(cur->text, map)
+			|| parse_identifier_line2(cur->text, map))
+		{
+			cur = cur->next;
+			continue ;
+		}
+		break ;
+	}
+	return (cur);
+}
+
+t_line	*skip_empty_lines(t_line *cur)
+{
+	while (cur && is_empty_line(cur->text))
+		cur = cur->next;
+	return (cur);
+}
+
 static int	parce_space_in_line(char *line)
 {
 	int	i;

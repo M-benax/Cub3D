@@ -6,7 +6,7 @@
 /*   By: elben-id <elben-id@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:19:26 by elben-id          #+#    #+#             */
-/*   Updated: 2025/11/10 15:13:37 by elben-id         ###   ########.fr       */
+/*   Updated: 2025/11/14 19:50:21 by elben-id         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,18 +84,16 @@ t_line	*read_file_to_list(char *filename)
 	int		fd;
 	t_line	*head;
 	int		r;
+	char	*ext;
 
 	if (!filename)
 		return (NULL);
-	printf("Attempting to open: '%s'\n", filename);
+	ext = ft_strrchr(filename, '.');
+	if (!ext || ft_strcmp(ext, ".cub") != 0)
+		return (NULL);
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-	{
-		perror("Error opening file");
-		printf("Failed to open: '%s'\n", filename);
 		return (NULL);
-	}
-	printf("File opened successfully, fd=%d\n", fd);
 	head = NULL;
 	while (1)
 	{

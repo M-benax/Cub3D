@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elben-id <elben-id@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jel-yous <jel-yous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 08:56:47 by M-benax           #+#    #+#             */
-/*   Updated: 2025/10/25 09:59:48 by elben-id         ###   ########.fr       */
+/*   Updated: 2025/11/11 19:29:38 by jel-yous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,8 @@ void	free_map(t_map *map)
 		free(map->ea_path);
 }
 
-void	error_exit(char *message)
+void	print_error(char *message)
 {
-	if (message)
-		write(2, message, ft_strlen(message));
-	write(2, "\n", 1);
-	exit(EXIT_FAILURE);
+	write(2, "Error:\n", 7);
+	write(2, message, ft_strlen(message));
 }

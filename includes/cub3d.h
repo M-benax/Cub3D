@@ -3,86 +3,125 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elben-id <elben-id@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jel-yous <jel-yous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/25 09:34:09 by elben-id          #+#    #+#             */
-/*   Updated: 2025/10/25 09:34:12 by elben-id         ###   ########.fr       */
+/*   Created: 2025/11/02 19:36:32 by jel-yous          #+#    #+#             */
+/*   Updated: 2025/11/11 19:50:07 by jel-yous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <fcntl.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <errno.h>
+# include <math.h>
+# include <mlx.h>
+# include "parse.h"
 
-typedef struct s_line
+# define FOV 60
+# define WINDOW_WIDTH 1600
+# define WINDOW_HEIGHT 900
+# define ROT_SPEED 0.7
+# define MOV_SPEED 5
+# define TILE_SIZE 64
+
+enum e_keys_events
 {
-	char			*text;
-	struct s_line	*next;
-}	t_line;
+	ON_KEYDOWN = 2,
+	ON_KEYUP = 3,
+	ON_DESTROY = 17,
+	LEFT_ARROW_KEY = 123,
+	RIGHT_ARROW_KEY = 124,
+	A_KEY = 0,
+	W_KEY = 13,
+	S_KEY = 1,
+	D_KEY = 2,
+	ESC_KEY = 53
+};
 
-typedef struct s_map
+enum e_directions
 {
-	char	**grid;
-	int		width;
-	int		height;
-	char	*no_path;
-	char	*so_path;
-	char	*we_path;
-	char	*ea_path;
-	int		floor_color[3];
-	int		ceiling_color[3];
-	int		player_x;
-	int		player_y;
-	char	player_dir;
-	int		no_set;
-	int		so_set;
-	int		we_set;
-	int		ea_set;
-	int		f_set;
-	int		c_set;
-}	t_map;
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST
+};
 
-/* parser: main entry */
-int		parse_cub_file(char *filename, t_map *map);
+typedef struct s_key_pressed
+{
+	int	left_arrow;
+	int	right_arrow;
+	int	w;
+	int	s;
+	int	a;
+	int	d;
+}	t_key_press;
 
-/* parser helpers exported across parser files */
-int		parse_color_line(char *line, int *color);
-int		parse_identifier_line(char *line, t_map *map);
-int		parse_identifier_line2(char *line, t_map *map);
+typedef struct s_img
+{
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	int		w;
+	int		h;
+}	t_img;
 
-/* validate.c */
-int		validate_map(t_map *map);
+typedef struct s_player
+{
+	double	x;
+	double	y;
+	double	angle;
+}	t_player;
 
-/* validate_helper.c */
-int		is_allowed(char c);
-int		scan_row_for_player(t_map *map, int y);
-int		locate_player(t_map *map);
-int		cell_is_enclosed(t_map *map, int x, int y);
-void	fill_spaces_with_walls(t_map *map);
+typedef struct s_ray
+{
+	double	distance;
+	double	angle;
+	int		direction;
+	double	wall_x;
+}	t_ray;
 
-/* utils.c */
-t_line	*read_file_to_list(char *filename);
-int		build_grid_from_list(t_line *start, t_map *map);
-void	free_list(t_line *head);
-void	free_map(t_map *map);
-void	error_exit(char *message);
+typedef struct s_game_data
+{
+	void			*mlx;
+	void			*mlx_win;
+	char			**map;
+	t_player		player;
+	t_img			img;
+	t_map			*t_map;
+	double			tile_size;
+	int				map_width;
+	int				map_height;
+	unsigned int	floor_color;
+	unsigned int	ceil_color;
+	t_key_press		key_event;
+	t_img			north_tex;
+	t_img			south_tex;
+	t_img			west_tex;
+	t_img			east_tex;
+}	t_game_data;
 
-/* helpers.c */
-size_t	ft_strlen(char *s);
-char	*ft_strdup(char *s1);
-int		ft_strncmp(char *s1, char *s2, size_t n);
-int		ft_atoi_simple(char *s);
-void	ft_bzero(void *s, size_t n);
+typedef struct s_dda
+{
+	double	xr;
+	double	yr;
+	double	xp;
+	double	yp;
+	double	step_x;
+	double	step_y;
+}	t_dda;
 
-/* get_next_line.c */
-int		get_next_line(int fd, char **line);
-
-/* gnl utility (append helper) */
-char	*append_char(char *buf, char c);
+void			init_game(t_game_data *g, t_map m);
+int				get_rgb_color(int colors[3]);
+void			exit_clean_game(t_game_data *game_data, int exit_code);
+int				on_key_down(int key, t_game_data *game_data);
+int				on_key_up(int key, t_game_data *game_data);
+int				on_destroy(t_game_data *game_data);
+void			player_movs(t_game_data *game_data);
+void			dda(t_game_data *g, t_ray *r);
+int				render(t_game_data *g);
+unsigned int	get_pixel_color(t_img *img, int x, int y);
+void			put_pixel(t_img *img, int x, int y, unsigned int color);
 
 #endif

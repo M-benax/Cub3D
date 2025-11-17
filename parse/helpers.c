@@ -6,7 +6,7 @@
 /*   By: elben-id <elben-id@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 16:31:42 by elben-id          #+#    #+#             */
-/*   Updated: 2025/11/11 15:19:46 by elben-id         ###   ########.fr       */
+/*   Updated: 2025/11/14 19:52:02 by elben-id         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,24 @@ char	*ft_strdup(char *s1)
 	while (end > start && (s1[end] == ' ' || s1[end] == '\t'))
 		end--;
 	return (copy_range(s1, start, end - start + 1));
+}
+
+char	*ft_strrchr(char *s, int c)
+{
+	char	*last;
+	int		i;
+
+	if (!s)
+		return (NULL);
+	last = NULL;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			last = &s[i];
+		i++;
+	}
+	if ((char)c == '\0')
+		return (&s[i]);
+	return (last);
 }

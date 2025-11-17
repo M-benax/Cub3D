@@ -12,44 +12,6 @@
 
 #include "../includes/cub3d.h"
 
-static int	is_empty_line(char *text)
-{
-	if (!text)
-		return (1);
-	while (*text)
-	{
-		if (*text != ' ' && *text != '\t')
-			return (0);
-		text++;
-	}
-	return (1);
-}
-
-static t_line	*consume_identifiers(t_line *head, t_map *map)
-{
-	t_line	*cur;
-
-	cur = head;
-	while (cur)
-	{
-		if (parse_identifier_line(cur->text, map)
-			|| parse_identifier_line2(cur->text, map))
-		{
-			cur = cur->next;
-			continue ;
-		}
-		break ;
-	}
-	return (cur);
-}
-
-static t_line	*skip_empty_lines(t_line *cur)
-{
-	while (cur && is_empty_line(cur->text))
-		cur = cur->next;
-	return (cur);
-}
-
 static t_line	*find_map_end(t_line *start)
 {
 	t_line	*cur;
@@ -62,43 +24,36 @@ static t_line	*find_map_end(t_line *start)
 
 static int	validate_no_content_after_map(t_line *after_map)
 {
-	t_line	*cur;
+	return (!skip_empty_lines(after_map));
+}
 
-	cur = skip_empty_lines(after_map);
-	if (cur)
+static int	build_map_with_end(t_line *map_start, t_line *map_end, t_map *map)
+{
+	t_line	*saved_next;
+
+	saved_next = map_end->next;
+	map_end->next = NULL;
+	if (!build_grid_from_list(map_start, map))
+	{
+		map_end->next = saved_next;
 		return (0);
-	return (1);
+	}
+	map_end->next = saved_next;
+	return (validate_no_content_after_map(map_end));
 }
 
 static int	build_map_section(t_line *start, t_map *map)
 {
 	t_line	*map_start;
 	t_line	*map_end;
-	t_line	*saved_next;
 
 	map_start = skip_empty_lines(start);
 	if (!map_start)
 		return (0);
 	map_end = find_map_end(map_start);
 	if (map_end)
-	{
-		saved_next = map_end->next;
-		map_end->next = NULL;
-		if (!build_grid_from_list(map_start, map))
-		{
-			map_end->next = saved_next;
-			return (0);
-		}
-		map_end->next = saved_next;
-		if (!validate_no_content_after_map(map_end))
-			return (0);
-	}
-	else
-	{
-		if (!build_grid_from_list(map_start, map))
-			return (0);
-	}
-	return (1);
+		return (build_map_with_end(map_start, map_end, map));
+	return (build_grid_from_list(map_start, map));
 }
 
 int	parse_cub_file(char *filename, t_map *map)
